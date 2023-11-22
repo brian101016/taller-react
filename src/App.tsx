@@ -1,18 +1,38 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import SongItem from "./SongItem";
+import { useState } from "react";
 
 function App() {
+  const [song, setSong] = useState("");
+  const [songsList, setSongsList] = useState<string[]>(["uno", "dos"]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <SongItem title="Nueva cancion" />
-      </header>
+      <h1>La cancion es: {song}</h1>
+      <div className="controles">
+        <input
+          placeholder="Ingresa el nombre de una cancion nueva..."
+          value={song}
+          onChange={(e) => {
+            setSong(e.target.value);
+          }}
+        />
+        <button
+          onClick={() => {
+            songsList.push(song); // 333nm
+            const nuevaLista: string[] = [...songsList]; // 45rty
+            // const [n1, n2, ...rest] = [1, 2, 3, 4, 5, 6];
+            setSongsList(nuevaLista);
+          }}
+        >
+          Agregar
+        </button>
+      </div>
+
+      <div className="container">
+        {songsList.map((currentSong, index) => {
+          return <SongItem title={currentSong} />;
+        })}
+      </div>
     </div>
   );
 }
