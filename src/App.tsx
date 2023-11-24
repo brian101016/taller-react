@@ -16,12 +16,14 @@ function App() {
             setSong(e.target.value);
           }}
         />
+
         <button
           onClick={() => {
-            songsList.push(song); // 333nm
-            const nuevaLista: string[] = [...songsList]; // 45rty
+            // songsList.push(song); // 333nm
+            const nuevaLista: string[] = [...songsList, song]; // 45rty
             // const [n1, n2, ...rest] = [1, 2, 3, 4, 5, 6];
             setSongsList(nuevaLista);
+            setSong("");
           }}
         >
           Agregar
@@ -29,8 +31,16 @@ function App() {
       </div>
 
       <div className="container">
-        {songsList.map((currentSong, index) => {
-          return <SongItem title={currentSong} />;
+        {songsList.map((currentSong, currentIndex) => {
+          return (
+            <SongItem
+              title={currentSong}
+              onClickDelete={() => {
+                songsList.splice(currentIndex, 1);
+                setSongsList([...songsList]);
+              }}
+            />
+          );
         })}
       </div>
     </div>

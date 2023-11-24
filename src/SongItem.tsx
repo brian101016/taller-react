@@ -1,6 +1,7 @@
 type SongItemProps = {
   title: string;
   desc?: string;
+  onClickDelete: () => void;
 };
 
 function SongItem(props: SongItemProps) {
@@ -15,7 +16,7 @@ function SongItem(props: SongItemProps) {
         <h3>{props.title}</h3>
         <p>{desc}</p>
         <button>Reproducir</button>
-        <button>Eliminar</button>
+        <button onClick={props.onClickDelete}>Eliminar</button>
       </div>
     </div>
   );
