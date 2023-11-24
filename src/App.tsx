@@ -3,6 +3,7 @@ import { useState } from "react";
 
 function App() {
   const [song, setSong] = useState("");
+  const [reproducir, setReproducir] = useState<string | null>(null);
   const [songsList, setSongsList] = useState<string[]>(["uno", "dos"]);
 
   return (
@@ -30,6 +31,14 @@ function App() {
         </button>
       </div>
 
+      {songsList.length === 0 ? (
+        <h1>Agrega canciones para continuar</h1>
+      ) : reproducir === null ? (
+        <h2>Selecciona una cancion...</h2>
+      ) : (
+        <h2>Ahora reproduciendo... {reproducir}</h2>
+      )}
+
       <div className="container">
         {songsList.map((currentSong, currentIndex) => {
           return (
@@ -38,6 +47,12 @@ function App() {
               onClickDelete={() => {
                 songsList.splice(currentIndex, 1);
                 setSongsList([...songsList]);
+                if (reproducir === currentSong) {
+                  setReproducir(null);
+                }
+              }}
+              onClickReproducir={() => {
+                setReproducir(currentSong);
               }}
             />
           );
