@@ -1,28 +1,24 @@
-import { useRef, useState } from "react";
-
-type PokeCardProps = {
+export type PokeCardProps = {
   id: number;
+  isActive: boolean;
+  isCompletado: boolean;
+  onClick?: () => void;
 };
 
 function PokeCard(props: PokeCardProps) {
-  const ref = useRef<HTMLImageElement | null>(null);
-  const [isActive, setIsActive] = useState(false);
-
   return (
     <button
-      className={"card cool-bg " + (isActive ? "show" : "")}
-      onClick={() => {
-        setIsActive(!isActive);
-        if (ref.current) {
-          ref.current.classList.toggle("hide");
-        }
-      }}
+      className={
+        "card cool-bg " +
+        (props.isActive ? " show" : "") +
+        (props.isCompletado ? " complete" : "")
+      }
+      onClick={props.onClick}
     >
       <img
         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.id}.png`}
         alt="pokemon"
-        className={"hide"}
-        ref={ref}
+        className={props.isActive ? "" : "hide"}
       />
     </button>
   );
