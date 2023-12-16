@@ -68,19 +68,29 @@ h1,
   margin: auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  padding: 2rem;
-  border-radius: 3rem;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
+  gap: 2.5rem;
+  user-select: none;
+  overflow: hidden;
 }
 
 /* ################################################## CARDS */
 .card {
-  margin: 1.5rem;
-  width: 150px;
-  aspect-ratio: 1/1;
+  width: 120px;
+  height: 120px;
   border-radius: 1rem;
   position: relative;
   justify-self: center;
   align-content: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  user-select: auto;
 }
 
 .visible-element {
@@ -177,7 +187,7 @@ h1,
   font-size: 3rem;
   color: var(--color-bg-light);
   border-radius: 2rem;
-  padding: 3rem;
+  padding: 1.5em;
   font-weight: 700;
   text-align: center;
 }
@@ -208,14 +218,7 @@ h1,
 }
 
 /* ################################################## RESPONSIVE */
-@media screen and (max-width: 1000px) {
-  .cards-container {
-    padding: 0;
-    border-radius: 2rem;
-  }
-}
-
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 750px) {
   .cards-container {
     display: flex;
     flex-wrap: wrap;
@@ -224,13 +227,31 @@ h1,
     border-radius: 0;
     padding: 1rem 0;
   }
-  .card {
-    width: 120px;
-  }
 }
 
 @media screen and (max-width: 500px) {
+  .cards-container {
+    gap: 1rem;
+  }
+
   .card {
-    margin: 1.25rem 0.5rem;
+    width: 96px;
+    height: 96px;
+  }
+
+  .modal,
+  .header,
+  h1 {
+    font-size: 2rem;
+  }
+
+  .timer {
+    height: 1rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .cards-container {
+    gap: 0.5rem;
   }
 }
