@@ -1,0 +1,217 @@
+/* ################################################## RESET */
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  box-sizing: border-box;
+}
+
+html {
+  --color-bg: #5c0025;
+  --color-bg-dark: #361623;
+  --color-bg-light: #542437;
+  --color-bg-bright: #c02942;
+
+  --color-select: #ce9b06;
+  --color-success: #16aa16;
+}
+
+/* ################################################## GENERALS */
+body,
+html,
+#root {
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+}
+
+#root {
+  box-shadow: inset 0px 0px 750px 0px;
+}
+
+h1,
+.header {
+  background-color: var(--color-bg-dark);
+  color: white;
+  text-align: center;
+  padding: 0.75rem 0;
+  font-size: 3rem;
+}
+
+.button {
+  border: 5px solid;
+  font-size: 1.5rem;
+  padding: 0.2em 0.5em;
+  border-radius: 2rem;
+  font-weight: 600;
+  background-color: transparent;
+  color: var(--color-bg-light);
+}
+
+.button:hover {
+  opacity: 0.7;
+}
+
+.button:active {
+  scale: 0.9;
+}
+
+/* ################################################## CONTAINERS */
+.memorama {
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards-container {
+  background-color: var(--color-bg-light);
+  width: 65%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* gap: 3rem; */
+  padding: 2rem;
+}
+
+/* ################################################## CARDS */
+.card {
+  margin: 1.5rem;
+  width: 150px;
+  height: 150px;
+  border-radius: 1rem;
+  position: relative;
+  justify-self: center;
+  align-content: center;
+}
+
+.visible-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--color-bg-bright) 3px solid;
+  border-radius: 1rem;
+  transition: scale 0.25s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.hitbox {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.hitbox:hover + .visible-element {
+  scale: 1.2 1.2;
+}
+
+.visible-element.show {
+  scale: -1 1;
+  border-color: var(--color-select);
+}
+
+.hitbox:hover + .visible-element.show {
+  scale: -1.2 1.2;
+}
+
+.visible-element.show::after {
+  content: "";
+  border-radius: 1rem;
+  backdrop-filter: blur(3px);
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+}
+
+.card img {
+  position: relative;
+  z-index: 1;
+}
+
+/* ################################################## TIMER */
+.timer {
+  height: 0.5rem;
+  width: 100%;
+  background-color: var(--color-select);
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  animation-name: timer;
+}
+
+.timer.stop {
+  background-color: var(--color-success);
+  animation-play-state: paused;
+}
+
+@keyframes timer {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* ################################################## MODAL */
+.modal-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff0a;
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: var(--color-select);
+  font-size: 3rem;
+  color: var(--color-bg-light);
+  border-radius: 2rem;
+  padding: 3rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ################################################## UTILITIES */
+.hide,
+.hidden {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.complete {
+  border-color: var(--color-success) !important;
+}
+
+.cool-bg {
+  --s: 50px; /* control the size */
+  --c: var(--color-bg-light);
+
+  --_g: #0000 calc(-650% / 13) calc(50% / 13), var(--c) 0 calc(100% / 13),
+    #0000 0 calc(150% / 13), var(--c) 0 calc(200% / 13), #0000 0 calc(250% / 13),
+    var(--c) 0 calc(300% / 13);
+  --_g0: repeating-linear-gradient(45deg, var(--_g));
+  --_g1: repeating-linear-gradient(-45deg, var(--_g));
+  background: var(--_g0), var(--_g0) var(--s) var(--s), var(--_g1),
+    var(--_g1) var(--s) var(--s) var(--color-bg-bright);
+  background-size: calc(2 * var(--s)) calc(2 * var(--s));
+}
+
+/* ################################################## RESPONSIVE */
+@media screen and (max-width: 600px) {
+  .cards-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

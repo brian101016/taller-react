@@ -1,39 +1,98 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import PokeCard, { PokeCardProps } from "./components/PokeCard";
 import { rand } from "./scripts/funcRandom";
+
+const TIMER = 75;
 
 function App() {
   const [pokeList, setPokeList] = useState<PokeCardProps[]>(crearLista());
   const [currentCard, setCurrentCard] = useState<PokeCardProps | null>(null);
   const [cooldown, setCooldown] = useState(false);
 
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [animPlay, setAnimPlay] = useState(false);
+  const [timer, setTimer] = useState(TIMER);
+  const [victories, setVictories] = useState(0);
 
+  const timerRef = useRef<HTMLDivElement | null>(null);
+
+  // ######################################## RESET ANIMATION
+  const resetAnimation = useCallback(() => {
+    if (timerRef.current) {
+      timerRef.current.style.animationName = "none";
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _ = timerRef.current.offsetHeight; /* trigger reflow */
+      timerRef.current.style.animationName = "";
+    }
+  }, []);
+
+  // ######################################## RESET ALL
+  const resetAll = useCallback(
+    (type: "round" | "every") => {
+      setPokeList(crearLista());
+      setCurrentCard(null);
+      setCooldown(false);
+      setGameOver(false);
+      if (type === "every") {
+        setAnimPlay(false);
+        setTimer(TIMER);
+        setVictories(0);
+      } else {
+        setTimer((prev) => (prev <= 10 ? 10 : prev - 4));
+        setAnimPlay(true);
+      }
+      resetAnimation();
+    },
+    [resetAnimation]
+  );
+
+  // ######################################## WIN ROUND
+  const winRound = useCallback(() => {
+    setVictories((prev) => prev + 1);
+    setAnimPlay(false);
+    setTimeout(() => resetAll("round"), 1000);
+  }, [resetAll]);
+
+  // ######################################## FIN DEL JUEGO
   useEffect(() => {
     if (currentCard === null) {
       const porTerminar = pokeList.some((item) => !item.isCompletado);
-      if (!porTerminar) {
-        setTimeout(() => {
-          ref.current?.click();
-        }, 1000);
-      }
+      if (!porTerminar) winRound();
     }
-  }, [pokeList, currentCard]);
+  }, [pokeList, currentCard, winRound]);
+
+  // ######################################## ANIMATION END
+  function handleAnimationEnd() {
+    setGameOver(true);
+  }
 
   return (
     <div className="memorama">
-      <h1>Selecciona un pokémon...</h1>
+      <div className="header">Nivel actual: {victories}</div>
 
-      <button
-        ref={ref}
-        onClick={() => {
-          setPokeList(crearLista());
-          setCooldown(false);
-          setCurrentCard(null);
+      <div
+        ref={timerRef}
+        className={"timer " + (animPlay ? "" : "stop")}
+        onAnimationEnd={handleAnimationEnd}
+        style={{
+          animationDuration: timer + "s",
         }}
-      >
-        Reiniciar
-      </button>
+      ></div>
+
+      <div className={"modal-back " + (gameOver ? "" : "hidden")}>
+        <div className="modal">
+          Fin del Juego! <br />
+          Puntuación: {victories} <br />
+          <button
+            className="button"
+            onClick={() => {
+              resetAll("every");
+            }}
+          >
+            Reiniciar?
+          </button>
+        </div>
+      </div>
 
       <div className="cards-container">
         {pokeList.map((item, index) => {
@@ -44,6 +103,7 @@ function App() {
               isCompletado={item.isCompletado}
               onClick={() => {
                 if (item.isCompletado || cooldown) return;
+                setAnimPlay(true);
 
                 // INVIRTIENDO EL ACTIVO
                 item.isActive = !item.isActive;
@@ -69,7 +129,7 @@ function App() {
                     currentCard.isActive = false;
                     setPokeList([...pokeList]);
                     setCooldown(false);
-                  }, 700);
+                  }, 500);
                 }
 
                 setCurrentCard(null);
